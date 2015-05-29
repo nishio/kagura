@@ -9,17 +9,20 @@ safetynet
   you can enter pdb by 'kill -USR1 <pid>' and run codes interactively. 
 
 USAGE:
-from kagura.safetynet import call_with_pm
+from kagura.safetynet import safetynet
 if __name__ == "__main__":
-    call_with_pm(main)
+    safetynet(main)
 
 This script is also a runnable sample.
 """
 
-def call_with_pm(func):
-    import traceback
-    import sys
-    import pdb
+import traceback
+import sys
+import pdb
+import logging
+import signal
+
+def safetynet(func):
     listen_signal()
     try:
         func()
@@ -36,7 +39,6 @@ def enter_pdb(signum, frame):
 
 
 def listen_signal():
-    import signal
     signal.signal(signal.SIGUSR1, enter_pdb)
 
 
@@ -46,9 +48,10 @@ def main():
     while i:
         i += 1
         time.sleep(1)
+        # send SIGUSR1 to watch *i*, try 'i = -1' and continue
     print 'finished'
 
 
 if __name__ == "__main__":
-    call_with_pm(main)
+    safetynet(main)
 

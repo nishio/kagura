@@ -1,3 +1,16 @@
+"""
+USAGE:
+args = get_args()
+
+or if you want to customize parser:
+
+parser = get_default_arg_parser()
+(add something into parser)
+args = get_args(parser)
+"""
+
+import os
+
 def get_default_arg_parser():
     import argparse
     parser = argparse.ArgumentParser()
@@ -16,7 +29,7 @@ def get_default_arg_parser():
         help='do ensemble. set ensemble targets, comma separated')
 
     parser.add_argument(
-        '--call', action='store',
+        '--call-function', '-f', action='store',
         help='call a function and exit')
 
     ## values
@@ -41,7 +54,7 @@ def get_default_arg_parser():
         help='parameters for the model')
 
     parser.add_argument(
-        '--tiny', dest='tiny', action='store_true',
+        '--tiny', action='store_true',
         help='set flag to use tiny data for rapid debugging')
 
     parser.add_argument(
@@ -50,7 +63,7 @@ def get_default_arg_parser():
 
     # misc
     parser.add_argument(
-        '--after', dest='after', action='store',
+        '--after', action='store',
         help='wait until another process stops')
 
     parser.add_argument(
@@ -58,3 +71,22 @@ def get_default_arg_parser():
         default="1", help='run parallel jobs if possible')
 
     return parser
+
+
+
+def get_args(parser=None):
+    if not parser:
+        parser = get_default_arg_parser()
+
+    args = parser.parse_args()
+
+    if not args.name:
+        info = []
+        if args.model:
+            info.append(args.model)
+        if args.param:
+            info.append(args.param)
+        info.append(str(os.getpid()))
+        args.name = "_".join(info)
+
+    return args

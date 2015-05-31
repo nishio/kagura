@@ -8,7 +8,7 @@ def get_model(args):
     # your own extention here
 """
 
-def get_model(args, extention):
+def get_model(args, extention=None):
     """
     get args, return new model instance
     """

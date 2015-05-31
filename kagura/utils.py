@@ -33,3 +33,11 @@ def start_end_log(f):
     return _wrap
 
 
+def stratified_split(xs, ys, nfold=10):
+    """
+    USAGE:
+    train_xs, test_xs, train_ys, test_ys = stratified_split(xs, ys)
+    """
+    from sklearn.cross_validation import StratifiedKFold
+    train, test = StratifiedKFold(ys, nfold).__iter__().next()
+    return xs[train], xs[test], ys[train], ys[test]

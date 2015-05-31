@@ -1,6 +1,33 @@
 """
 Wait until the specified process is terminated.
+
+SAMPLE:
+def foo():
+    import time
+    time.sleep(5)
+    logging.info('foo')
+
+
+def bar():
+    logging.info('bar')
+
+COMMAND:
+$ python t.py --call=foo --after=auto
+$ python t.py --call=bar --after=auto
+
+LOG OUTPUT:
+2015-05-31 11:16:30/(17902) start process: t.py --call=foo --after=auto
+2015-05-31 11:16:30/(17902) waiting 17832, but it is already finished
+2015-05-31 11:16:32/(17916) start process: t.py --call=bar --after=auto
+2015-05-31 11:16:32/(17916) waiting 17902
+2015-05-31 11:16:36/(17902) foo
+2015-05-31 11:16:36/(17902) end process: t.py --call=foo --after=auto
+2015-05-31 11:16:36/(17916) finish waiting. continue command: t.py --call=bar --after=auto
+2015-05-31 11:16:36/(17916) bar
+2015-05-31 11:16:36/(17916) end process: t.py --call=bar --after=auto
 """
+
+
 import os
 import time
 import logging

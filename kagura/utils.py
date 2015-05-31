@@ -19,18 +19,14 @@ def second2human(x):
 import sys
 import time
 import logging
-def start_end_log(f):
-    def _wrap():
-        "decorate function to log when start and end"
-        logging.info("command: %s", " ".join(sys.argv))
-        start_time = time.time()
-        logging.info("start: %s", f)
-        f()
-        logging.info("end: %s", f)
-        elapse = time.time() - start_time
+class HumaneElapse(object):
+    def __init__(self):
+        logging.info("start")
+        self.start_time = time.time()
+
+    def end(self):
+        elapse = time.time() - self.start_time
         logging.info("elapse %s", second2human(elapse))
-        logging.info("end command: %s", " ".join(sys.argv))
-    return _wrap
 
 
 def stratified_split(xs, ys, nfold=10):

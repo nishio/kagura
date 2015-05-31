@@ -7,11 +7,13 @@ from kagura.getlogger import logging
 from kagura.safetynet import safetynet
 from kagura.utils import start_end_log
 from kagura.getarg import get_args
-
+from kagura import processqueue
 
 @start_end_log
 def main():
     args = get_args()
+    processqueue.listen(args)
+
     if args.call_function:
         f = globals()[args.call_function]
         f()

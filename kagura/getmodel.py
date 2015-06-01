@@ -53,6 +53,10 @@ def get_model(args, extention=None):
     if m == "XGB":
         from .xgbwrapper import XGBWrapper
         return XGBWrapper()
+    if m == "XGBBin":
+        from .xgbwrapper import XGBBinary
+        if not args.param: args.param = '0.3'
+        return XGBBinary(eta=float(args.param))
 
     if extention:
         model = extention()

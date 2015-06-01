@@ -25,9 +25,15 @@ class HumaneElapse(object):
         self.start_time = time.time()
 
     def end(self):
-        elapse = time.time() - self.start_time
-        logging.info("elapse %s", second2human(elapse))
+        self.elapse = time.time() - self.start_time
+        logging.info("elapse %s", second2human(self.elapse))
 
+    def lap(self):
+        self.elapse = time.time() - self.start_time
+        return self.elapse
+
+    def get_human(self):
+        return second2human(self.elapse)
 
 def stratified_split(xs, ys, nfold=10):
     """

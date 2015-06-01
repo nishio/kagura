@@ -81,12 +81,17 @@ def get_args(parser=None):
     args = parser.parse_args()
 
     if not args.name:
-        info = []
-        if args.model:
-            info.append(args.model)
-        if args.param:
-            info.append(args.param)
-        info.append(str(os.getpid()))
-        args.name = "_".join(info)
-
+        make_better_name(args)
     return args
+
+
+
+def make_better_name(args):
+    info = []
+    if args.model:
+        info.append(args.model)
+    if args.param:
+        info.append(args.param)
+    info.append(str(os.getpid()))
+    args.name = "_".join(info)
+

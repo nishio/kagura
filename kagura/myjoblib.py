@@ -12,13 +12,15 @@ def load(filename):
     raise RuntimeError('No file', filepath)
 
 
-def dump(value, filename):
+def dump(value, filename, force_overwrite=False):
     import os
-    if os.path.exist(filename):
-        # user specified an existing filename, avoid overwriting
-        dump(value, filename + "_NEW")
-        return
-    os.makedirs(filename)
+    if os.path.exists(filename):
+        if not force_overwrite:
+            # user specified an existing filename, avoid overwriting
+            dump(value, filename + "_NEW")
+            return
+    else:
+        os.makedirs(filename)
     filepath = os.path.join(filename, 'index')
     joblib.dump(value, filepath)
 

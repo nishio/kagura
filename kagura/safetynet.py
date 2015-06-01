@@ -33,6 +33,17 @@ def safetynet(func):
         pdb.post_mortem(tb)
 
 
+def hole(func):
+    '''avoid pdb and die rapidly'''
+    try:
+        func()
+    except:
+        type, value, tb = sys.exc_info()
+        logging.debug('', exc_info=sys.exc_info())
+        traceback.print_exc()
+        sys.exit(1)
+
+
 def enter_pdb(signum, frame):
     import pdb
     pdb.Pdb().set_trace(frame)

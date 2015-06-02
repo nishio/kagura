@@ -20,8 +20,9 @@ import sys
 import time
 import logging
 class HumaneElapse(object):
-    def __init__(self):
-        logging.info("start")
+    def __init__(self, msg='start'):
+        if msg:
+            logging.info(msg)
         self.start_time = time.time()
 
     def end(self):

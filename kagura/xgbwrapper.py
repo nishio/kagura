@@ -63,7 +63,11 @@ class XGBBinary(object):
         print 'predict proba'
         N = xs.shape[0]
         xs = xgb.DMatrix(xs)
-        pred = self.bst.predict(xs, ntree_limit=self.bst.best_iteration)
+        if hasatter(self.bst, best_iteration):
+            pred = self.bst.predict(xs, ntree_limit=self.bst.best_iteration)
+        else:
+            pred = self.bst.predict(xs)
+
         return pred
 
     def predict(self, xs):
@@ -72,7 +76,7 @@ class XGBBinary(object):
         pred[pred <= 0.5] = 0
         return pred
 
-     def score(self, xs, ys):
+    def score(self, xs, ys):
         from sklearn.metrics import log_loss
         pred = self.predict_proba(xs)
         return log_loss(ys, pred)

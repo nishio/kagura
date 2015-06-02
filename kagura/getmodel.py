@@ -13,6 +13,9 @@ def get_model(args, extention=None):
     get args, return new model instance
     """
     m = args.model
+    if m == "Dummy":
+        from sklearn.dummy import DummyClassifier
+        return DummyClassifier()
     if m == "LR":
         from sklearn.linear_model import LogisticRegression
         if not args.param:
@@ -36,7 +39,7 @@ def get_model(args, extention=None):
     if m == "ExT_gini":
         from sklearn.ensemble import ExtraTreesClassifier
         return ExtraTreesClassifier(
-            n_estimators=int(args.param), criterion='entropy')
+            n_estimators=int(args.param), criterion='gini')
     if m == "GBC" or m == "GBDT":
         from sklearn.ensemble import GradientBoostingClassifier
         return GradientBoostingClassifier(
@@ -58,6 +61,14 @@ def get_model(args, extention=None):
         if not args.param: args.param = '0.3'
         return XGBBinary(eta=float(args.param))
 
+    if m == "NN":
+        from .mylasagne import LasagneWrapper
+        return LasagneWrapper()
+    if m == "PCA_XGBBin":
+        from .xgbwrapper import XGBBinary
+        if not args.param: args.param = '0.3'
+        return PCAPreprocess(XGBBinary(eta=float(args.param)))
+
     if extention:
         model = extention()
         if model:
@@ -68,3 +79,17 @@ def get_model(args, extention=None):
 
 def add_default_to_get_model(f):
     return lambda args: get_model(args, f)
+
+
+class PCAPreprocess(object):
+    def __init__(self, model):
+        self.model = model
+    def fit(self, xs, ys):
+        from sklearn.decomposition import PCA
+        self.pca = m = PCA(n_components=len(xs[0]), whiten=True)
+        xs_pca = m.fit_transform(xs)
+        self.model.fit(xs_pca, ys)
+        return self
+    def predict_proba(self, xs):
+        xs_pca = self.pca.transform(xs)
+        return self.predict_proba(xs_pca)

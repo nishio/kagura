@@ -26,6 +26,8 @@ def safetynet(func):
     listen_signal()
     try:
         func()
+    except SystemExit:  # intentional exit
+        return # finish process silently
     except:
         type, value, tb = sys.exc_info()
         logging.debug('', exc_info=sys.exc_info())

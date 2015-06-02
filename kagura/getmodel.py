@@ -68,7 +68,9 @@ def get_model(args, extention=None):
         from .xgbwrapper import XGBBinary
         if not args.param: args.param = '0.3'
         return PCAPreprocess(XGBBinary(eta=float(args.param)))
-
+    if m == "SS_KNN":
+        from sklearn.neighbors import KNeighborsClassifier
+        return SubsamplePreprocess(KNeighborsClassifier())
     if extention:
         model = extention()
         if model:
@@ -93,3 +95,18 @@ class PCAPreprocess(object):
     def predict_proba(self, xs):
         xs_pca = self.pca.transform(xs)
         return self.predict_proba(xs_pca)
+
+
+class SubsamplePreprocess(object):
+    def __init__(self, model, p=0.1):
+        self.model = model
+        self.p = p
+    def fit(self, xs, ys):
+        r = np.random.random(len(xs))
+        sample = (r < self.p)
+        xs = xs[sample]
+        ys = ys[sample]
+        self.model.fit(xs, ys)
+        return self
+    def predict_proba(self, xs):
+        return self.model.predict_proba(xs)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-Westnile
+Binary Classification
 """
 import numpy as np
 from kagura.getlogger import logging
@@ -579,6 +579,22 @@ def fit_and_test(xs_train, ys_train, xs_test, ys_test):
 
     pred_test = model.predict_proba(xs_test)
     return model, pred_test, fit_time
+
+
+def init_dataset():
+    from sklearn.datasets import load_digits
+    from sklearn.cross_validation import StratifiedShuffleSplit
+    data = load_digits()
+    data.target = (data.target == 5)  # Binary Classification
+    train, test = list(StratifiedShuffleSplit(data.target, n_iter=1, test_size=0.5))[0]
+    xs = data.data[train]
+    ys = data.target[train]
+    xs_sub = data.data[test]
+    ys_sub = data.target[test]
+    dump(xs, 'xs')
+    dump(ys, 'ys')
+    dump(xs_sub, 'xs_sub')
+    dump(ys_sub, 'ys_sub')
 
 #///
 if __name__ == "__main__":

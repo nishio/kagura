@@ -514,29 +514,6 @@ def choose_a_pawn():
     return  choice(glob('pawn_*'))
 
 
-def auto_boost():
-    import subprocess
-    i = 1
-    # to shutdown gracefully,
-    # use SIGUSR1 and set args.auto_boost=False
-    ME = ['./westnile.py', '--with-hole']
-    nameopt = "--name=%s_%%d" % args.name
-
-    BOOST = ['--random-boost --with-hole']
-    ENSEMBLE = 'python westnile.py --random-ensemble --with-hole'
-
-    while args.auto_boost:
-        logging.info('auto boosting %d', i)
-        if np.random.random() < 0.5:
-            command = '--random-boost'
-        else:
-            command = '--random-ensemble'
-
-        subprocess.call(
-            ME + [command, nameopt % i])
-        i += 1
-
-
 def choose_pawns(p=0.5):
     from glob import glob
     targets = glob('pawn_*')
@@ -595,6 +572,31 @@ def init_dataset():
     dump(ys, 'ys')
     dump(xs_sub, 'xs_sub')
     dump(ys_sub, 'ys_sub')
+
+
+def auto_boost():
+    import subprocess
+    i = 1
+    # to shutdown gracefully,
+    # use SIGUSR1 and set args.auto_boost=False
+    ME = [__file__, '--with-hole']
+    nameopt = "--name=%s_%%d" % args.name
+
+    BOOST = ['--random-boost --with-hole']
+    ENSEMBLE = 'python westnile.py --random-ensemble --with-hole'
+
+    while args.auto_boost:
+        logging.info('auto boosting %d', i)
+        if np.random.random() < 0.5:
+            command = '--random-boost'
+        else:
+            command = '--random-ensemble'
+
+        subprocess.call(
+            ME + [command, nameopt % i])
+        i += 1
+
+
 
 #///
 if __name__ == "__main__":

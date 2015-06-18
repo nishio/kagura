@@ -59,8 +59,14 @@ def get_previous_pid():
     return int(pids[-2])
 
 
-def listen(args):
+def record_pid():
+    if sys.argv[0].endswith('ipython'):
+        return
     file(QUEUE_NAME, 'a').write('%s\n' % os.getpid())
+
+
+def listen(args):
+    record_pid()
     if args.after:
         if args.after == "auto":
             pid = get_previous_pid()

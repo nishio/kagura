@@ -23,13 +23,28 @@ import xgboost as xgb
 
 class XGBBinary(object):
     "XGB for binary clustering"
-    def __init__(self, num_boost_round=400, test=None, **params):
+    def __init__(self, num_boost_round=100, test=None, **params):
         self.params = params
-        self.num_boost_round = num_boost_round
         if test:
-            test_xs, test_ys = test
-            test = xgb.DMatrix(test_xs, label=test_ys)
+            xs_test, ys_test = test
+            test = xgb.DMatrix(xs_test, label=ys_test)
+            num_boost_round = 1000
+        self.num_boost_round = num_boost_round
         self.test = test
+
+    def fit_and_test(self, xs_train, ys_train, xs_test, ys_test):
+        from kagura.utils import HumaneElapse
+        from kagura.getlogger import logging
+        self.test = xgb.DMatrix(xs_test, ys_test)
+        self.num_boost_round = 1000
+        t = HumaneElapse('start fitting')
+        self.fit(xs_train, ys_train)
+        fit_time = t.lap()
+        logging.info(
+            "fit time: %s %s",
+            t.get_human(), args.name)
+        pred_test = model.predict_proba(xs_test)
+        return model, pred_test, fit_time
 
     def fit(self, xs, ys):
         dtrain = xgb.DMatrix(xs, label=ys)
@@ -60,14 +75,16 @@ class XGBBinary(object):
         return self
 
     def predict_proba(self, xs):
-        print 'predict proba'
         N = xs.shape[0]
         xs = xgb.DMatrix(xs)
-        if hasatter(self.bst, best_iteration):
+        if hasattr(self.bst, "best_iteration"):
             pred = self.bst.predict(xs, ntree_limit=self.bst.best_iteration)
         else:
             pred = self.bst.predict(xs)
 
+        min = pred.min()
+        diff = pred.max() - min
+        pred = (pred - min) / diff
         return pred
 
     def predict(self, xs):
@@ -88,8 +105,8 @@ class XGBWrapper(object):
         self.params = params
         self.num_boost_round = num_boost_round
         if test:
-            test_xs, test_ys = test
-            test = xgb.DMatrix(test_xs, label=test_ys)
+            xs_test, ys_test = test
+            test = xgb.DMatrix(xs_test, label=ys_test)
         self.test = test
 
     def fit(self, xs, ys):
@@ -132,7 +149,10 @@ class XGBWrapper(object):
         print 'predict proba'
         N = xs.shape[0]
         xs = xgb.DMatrix(xs)
-        pred = self.bst.predict(xs, ntree_limit=self.bst.best_iteration)
+        if hasattr(self.bst, "best_iteration"):
+            pred = self.bst.predict(xs, ntree_limit=self.bst.best_iteration)
+        else:
+            pred = self.bst.predict(xs)
         pred = pred.reshape(N, self.params['num_class'])
         return pred
 

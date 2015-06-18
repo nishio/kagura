@@ -21,8 +21,8 @@ def get_default_arg_parser():
 
     ## actions
     parser.add_argument(
-        '--submit', '-s', action='store_true',
-        help='make submission')
+        '--submit', '-s', action='store',
+        help='make submission CSV')
 
     parser.add_argument(
         '--cross-validation', '-c', action='store_true',
@@ -77,16 +77,16 @@ def get_default_arg_parser():
     return parser
 
 
-
 def get_args(parser=None):
     if not parser:
         parser = get_default_arg_parser()
 
     args = parser.parse_args()
 
+    args.is_name_generated = False
     if not args.name:
         make_better_name(args)
-    return args
+        args.is_name_generated = True
 
     __builtin__.args = args
     return args
@@ -94,10 +94,15 @@ def get_args(parser=None):
 
 def make_better_name(args):
     info = []
+    if args.submit:
+        args.name = args.submit
+        return
+
     if args.model:
         info.append(args.model)
     if args.param:
         info.append(args.param)
     info.append(str(os.getpid()))
     args.name = "_".join(info)
+
 

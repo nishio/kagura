@@ -352,6 +352,11 @@ def cross_validation(tiny=False):
         median = np.median(prev_score)
         sure = (prev_score > median)[:, 0]
         not_sure = (prev_score <= median)[:, 0]
+        if all(not x for x in sure):
+            prev_score = prev_score + np.random.random(len(prev_score)) * 0.01
+            median = np.median(prev_score)
+            sure = (prev_score > median)[:, 0]
+            not_sure = (prev_score <= median)[:, 0]
     else:
         sure = []
         not_sure = range(NUM_TRAIN)

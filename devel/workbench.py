@@ -303,6 +303,7 @@ def make_ensemble_input(targets):
     xs_sub = np.hstack(pred_subs)
     return xs, ys, xs_sub
 
+
 def cross_validation(tiny=False):
     logging.info("start cross validation")
 
@@ -457,7 +458,6 @@ def cross_validation(tiny=False):
     # digested one line info
     parent = 'None'
     if args.boost: parent = args.boost
-    if args.random_ensemble: parent = args.targets
     if args.ensemble: parent = args.ensemble
     total_score = scorer(ys, pred)
     logging.info(
@@ -567,7 +567,7 @@ def assure_col_vector(a):
 
 def fit_and_test(xs_train, ys_train, xs_test, ys_test):
     model = get_model(args)
-    if model.hasattr('fit_and_test'):
+    if hasattr(model, 'fit_and_test'):
         return model.fit_and_test(
             xs_train, ys_train, xs_test, ys_test)
     t = HumaneElapse('start fitting')

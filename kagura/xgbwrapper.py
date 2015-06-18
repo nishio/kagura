@@ -43,8 +43,8 @@ class XGBBinary(object):
         logging.info(
             "fit time: %s %s",
             t.get_human(), args.name)
-        pred_test = model.predict_proba(xs_test)
-        return model, pred_test, fit_time
+        pred_test = self.predict_proba(xs_test)
+        return self, pred_test, fit_time
 
     def fit(self, xs, ys):
         dtrain = xgb.DMatrix(xs, label=ys)

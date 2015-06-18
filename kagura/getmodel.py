@@ -7,7 +7,6 @@ USAGE with extention:
 def get_model(args):
     # your own extention here
 """
-
 def get_model(args, extention=None):
     """
     get args, return new model instance
@@ -23,27 +22,32 @@ def get_model(args, extention=None):
         return LogisticRegression(C=float(args.param))
     if m == "RF":
         from sklearn.ensemble import RandomForestClassifier
+        n = int(args.param) if args.param else 10
         return RandomForestClassifier(
-            n_estimators=int(args.param), criterion='entropy')
+            n_estimators=n, criterion='entropy')
     if m == "RF_gini":
         from sklearn.ensemble import RandomForestClassifier
+        n = int(args.param) if args.param else 10
         return RandomForestClassifier(
-            n_estimators=int(args.param), criterion='gini')
+            n_estimators=n, criterion='gini')
     if m == "NB":
         from sklearn.naive_bayes import MultinomialNB
         return MultinomialNB()
     if m == "ExT":
         from sklearn.ensemble import ExtraTreesClassifier
+        n = int(args.param) if args.param else 10
         return ExtraTreesClassifier(
-            n_estimators=int(args.param), criterion='entropy')
+            n_estimators=n, criterion='entropy')
     if m == "ExT_gini":
         from sklearn.ensemble import ExtraTreesClassifier
+        n = int(args.param) if args.param else 10
         return ExtraTreesClassifier(
-            n_estimators=int(args.param), criterion='gini')
+            n_estimators=n, criterion='gini')
     if m == "GBC" or m == "GBDT":
         from sklearn.ensemble import GradientBoostingClassifier
+        n = int(args.param) if args.param else 10
         return GradientBoostingClassifier(
-            n_estimators=int(args.param))
+            n_estimators=n)
     if m == "LRL1":
         from sklearn.linear_model import LogisticRegression
         return LogisticRegression(penalty='l1', C=0.01)
@@ -75,7 +79,8 @@ def get_model(args, extention=None):
         model = extention()
         if model:
             return model
-
+    if m == None:
+        raise RuntimeError("--model is not specified")
     raise NotImplementedError
 
 

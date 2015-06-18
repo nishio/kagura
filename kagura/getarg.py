@@ -7,9 +7,13 @@ or if you want to customize parser:
 parser = get_default_arg_parser()
 (add something into parser)
 args = get_args(parser)
+
+The variable 'args' is in built-in scope,
+that is, you can access it from all files.
 """
 
 import os
+import __builtin__
 
 def get_default_arg_parser():
     import argparse
@@ -84,6 +88,8 @@ def get_args(parser=None):
         make_better_name(args)
     return args
 
+    __builtin__.args = args
+    return args
 
 
 def make_better_name(args):

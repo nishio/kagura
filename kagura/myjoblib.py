@@ -1,26 +1,31 @@
 """
-joblib wrapper: put files in a directory
+joblib wrapper: put files in a directory.
+
+aliasd as kagura.load and kagura.dump
 """
 
 from sklearn.externals import joblib
 import os
 
-def load(filename):
-    filepath = os.path.join(filename, 'index')
+def load(name):
+    "load from given name"
+    filepath = os.path.join(name, 'index')
     if os.path.isfile(filepath):
         return joblib.load(filepath)
     raise RuntimeError('No file', filepath)
 
 
-def dump(value, filename, force_overwrite=False):
+def dump(value, name, force_overwrite=False):
+    """dump value as given name.
+    """
     import os
-    if os.path.exists(filename):
+    if os.path.exists(name):
         if not force_overwrite:
-            # user specified an existing filename, avoid overwriting
-            dump(value, filename + "_NEW")
+            # user specified an existing name, avoid overwriting
+            dump(value, name + "_NEW")
             return
     else:
-        os.makedirs(filename)
-    filepath = os.path.join(filename, 'index')
+        os.makedirs(name)
+    filepath = os.path.join(name, 'index')
     joblib.dump(value, filepath)
 

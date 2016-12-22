@@ -13,6 +13,7 @@ from random import choice
 
 class TabooSampling(object):
     def __init__(self, samples):
+        " "
         self.samples = set(samples)
         self.N = len(samples)
         assert self.N > 2
@@ -21,6 +22,7 @@ class TabooSampling(object):
         self.taboo_index = 0
 
     def choice(self):
+        " "
         sample = choice(list(self.samples - set(self.taboos)))
         self.taboos[self.taboo_index] = sample
         self.taboo_index = (self.taboo_index + 1) % self.M

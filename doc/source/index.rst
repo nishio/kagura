@@ -11,6 +11,25 @@ Welcome to Kagura's documentation!
    :caption: Contents:
 
 
+.. automodule:: kagura
+   :members:
+
+.. automodule:: kagura.myjoblib
+   :members:
+
+.. automodule:: kagura.safetynet
+   :members:
+
+.. automodule:: kagura.taboosampling
+   :members:
+
+.. automodule:: kagura.utils
+   :members:
+
+.. automodule:: kagura.xgbwrapper
+   :members:
+
+
 
 Indices and tables
 ==================

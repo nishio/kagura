@@ -3,7 +3,16 @@ utilities
 """
 
 def second2human(x):
-    "given seconds return human-readable string"
+    """
+    given seconds return human-readable string
+
+    >>> second2human(10)
+    '10s'
+    >>> second2human(100)
+    '1m 40s'
+    >>> second2human(10000)
+    '2h 46m 40s'
+    """
     s_hour = x // 3600
     s_min = x // 60 % 60
     s_sec = int(x) % 60
@@ -36,6 +45,7 @@ class HumaneElapse(object):
     def get_human(self):
         return second2human(self.elapse)
 
+
 def stratified_split(xs, ys, nfold=10):
     """
     USAGE:
@@ -44,3 +54,10 @@ def stratified_split(xs, ys, nfold=10):
     from sklearn.cross_validation import StratifiedKFold
     train, test = StratifiedKFold(ys, nfold).__iter__().next()
     return xs[train], xs[test], ys[train], ys[test]
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+if __name__ == '__main__':
+    _test()

@@ -29,6 +29,9 @@ Welcome to Kagura's documentation!
 .. automodule:: kagura.xgbwrapper
    :members:
 
+.. automodule:: kagura.feature_from_tree
+   :members:
+
 
 
 Indices and tables

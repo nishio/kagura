@@ -4,29 +4,6 @@ utilities
 
 """
 
-def second2human(x):
-    """
-    given seconds return human-readable string
-
-    >>> second2human(10)
-    '10s'
-    >>> second2human(100)
-    '1m 40s'
-    >>> second2human(10000)
-    '2h 46m 40s'
-    """
-    s_hour = x // 3600
-    s_min = x // 60 % 60
-    s_sec = int(x) % 60
-    ret = ""
-    if s_hour:
-        ret += "%dh " % s_hour
-    if s_hour or s_min:
-        ret += "%dm " % s_min
-    ret += "%ds" % s_sec
-    return ret
-
-
 import sys
 import time
 import logging
@@ -103,9 +80,3 @@ def quick_cv(X, Y, seed=1234):
     print ", ".join(show(name) for name in sorted(score))
 
 
-def _test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == '__main__':
-    _test()

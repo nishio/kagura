@@ -33,16 +33,16 @@ class XGBBinary(object):
         self.test = test
 
     def fit_and_test(self, xs_train, ys_train, xs_test, ys_test):
-        from kagura.utils import HumaneElapse
+        from kagura.stopwatch import Stopwatch
         from kagura.getlogger import logging
         self.test = xgb.DMatrix(xs_test, ys_test)
         self.num_boost_round = 1000
-        t = HumaneElapse('start fitting')
+        t = Stopwatch('start fitting')
         self.fit(xs_train, ys_train)
         fit_time = t.lap()
         logging.info(
             "fit time: %s %s",
-            t.get_human(), args.name)
+            t.get(), args.name)
         pred_test = self.predict_proba(xs_test)
         return self, pred_test, fit_time
 

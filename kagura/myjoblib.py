@@ -29,3 +29,10 @@ def dump(value, name, force_overwrite=False):
     filepath = os.path.join(name, 'index')
     joblib.dump(value, filepath)
 
+
+def make_if_not_exist(builder, name, force_regenerate=False):
+    if not force_regenerate and os.path.exists(name):
+        return load(name)
+    value = builder()
+    dump(value, name)
+    return value

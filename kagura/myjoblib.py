@@ -18,7 +18,6 @@ def load(name):
 def dump(value, name, force_overwrite=False):
     """dump value as given name.
     """
-    import os
     if os.path.exists(name):
         if not force_overwrite:
             # user specified an existing name, avoid overwriting

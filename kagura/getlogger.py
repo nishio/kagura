@@ -28,7 +28,17 @@ def get_logger_to_stderr():
     handler.setLevel(DEBUG)
     logger.setLevel(DEBUG)
     logger.addHandler(handler)
-    return logger  # it write on file and stderr
+    return logger  # it writes on file and stderr
+
+
+def get_logger_to_stdout():
+    import sys
+    logger = getLogger("kagura.stdout")
+    handler = StreamHandler(sys.stdout)
+    handler.setLevel(DEBUG)
+    logger.setLevel(DEBUG)
+    logger.addHandler(handler)
+    return logger  # it writes on file and stdout
 
 
 def log_process_life():

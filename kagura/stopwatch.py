@@ -36,20 +36,32 @@ class Stopwatch(object):
     >>> sw.end()
     end foo: 0s
     """
-    def __init__(self, name="stopwatch", start_now=False, ignore_msec=False):
+    def __init__(self, name="stopwatch", start_now=False,
+                 ignore_msec=False, to_log=False):
         self.name = name
         self.ignore_msec = ignore_msec
+        self.to_log = to_log
+        if to_log:
+            import kagura.getlogger
+            self.logger = kagura.getlogger.get_logger_to_stdout()
+
         if start_now:
             self.start()
 
+    def _log(self, msg):
+        if self.to_log:
+            self.logger.info(msg)
+        else:
+            print(msg)
+
     def start(self):
-        print "start {}".format(self.name)
+        self._log("start {}".format(self.name))
         self.start_time = time.time()
 
     def end(self):
-        print "end {}: {}".format(
+        self._log("end {}: {}".format(
             self.name, self.get()
-        )
+        ))
 
     def get(self):
         elapse = time.time() - self.start_time
@@ -102,6 +114,7 @@ def _test():
     """
     import doctest
     doctest.testmod()
+    print 'test ok'
 
 if __name__ == '__main__':
     _test()

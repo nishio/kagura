@@ -59,3 +59,41 @@ def quick_cv(X, Y, seed=1234):
     print ", ".join(show(name) for name in sorted(score))
 
 
+import time
+class Digest(object):
+    "print a line per a second to avoid printing overhead"
+    def __init__(self, elapse=1):
+        self.starttime = time.time()
+        self.lasttime = time.time()
+        self.num_digested = 0
+        self.elapse = elapse
+
+    def digest(self, msg):
+        t = time.time()
+        if t - self.lasttime < self.elapse:
+            self.num_digested += 1
+            return 0
+
+        print "{} ({} message digested)".format(
+            msg, self.num_digested)
+        ret = self.num_digested
+        self.num_digested = 0
+        self.lasttime = t
+        return ret
+
+def to_bytes(array):
+    def crop(v):
+        v = int(v)
+        if v < 0: v = 0
+        if v > 255: v = 255
+        return chr(v)
+    return "".join(map(crop, array))
+
+
+def from_corner(size):
+    for xy in range(size * size):
+        for x in range(size):
+            y = xy - x
+            if y >= size: continue
+            if y < 0: break
+            yield (x, y)

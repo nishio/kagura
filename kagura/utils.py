@@ -97,3 +97,22 @@ def from_corner(size):
             if y >= size: continue
             if y < 0: break
             yield (x, y)
+
+def one(xs):
+    """
+    >>> one([0, 0, 0])
+    False
+    >>> one([0, 0, 1])
+    True
+    >>> one([0, 1, 1])
+    False
+    >>> one([0, 1, 0])
+    True
+    """
+    ret = False
+    for x in xs:
+        if x:
+            if ret:
+                return False
+            ret = True
+    return ret

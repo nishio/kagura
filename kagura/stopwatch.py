@@ -13,6 +13,8 @@ def second2human(x, ignore_msec=True):
     '1m 40s'
     >>> second2human(10000)
     '2h 46m 40s'
+    >>> second2human(1.234, ignore_msec=False)
+    '1s 234ms'
     """
     s_hour = x // 3600
     s_min = x // 60 % 60
@@ -24,7 +26,7 @@ def second2human(x, ignore_msec=True):
         ret += "%dm " % s_min
     ret += "%ds" % s_sec
     if not ignore_msec:
-        s_msec = int(x * 1000)
+        s_msec = int(x * 1000) % 1000
         ret += " %dms" % s_msec
     return ret
 

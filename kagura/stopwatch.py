@@ -39,18 +39,19 @@ class Stopwatch(object):
     end foo: 0s
     """
     def __init__(self, name="stopwatch", start_now=False,
-                 ignore_msec=False, to_log=False):
+                 ignore_msec=False, to_log=False, quiet=False):
         self.name = name
         self.ignore_msec = ignore_msec
         self.to_log = to_log
         if to_log:
             import kagura.getlogger
             self.logger = kagura.getlogger.get_logger_to_stdout()
-
+        self.quiet = quiet
         if start_now:
             self.start()
 
     def _log(self, msg):
+        if self.quiet: return
         if self.to_log:
             self.logger.info(msg)
         else:
